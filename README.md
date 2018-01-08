@@ -27,7 +27,7 @@ API
 `on::exit()`
 ------------
 
-Run a command when the currently executing script or subshell ends.
+Run a command when the currently executing script or subshell ends. This overwrites the `EXIT` trap, but tries to do this in a polite way. If the trap is already assigned another command, that command is added to the list of commands to run at the end. Subsequent calls to `on::exit` will keep adding to this array.
 
 * $1   - The command to execute.
 * $2-@ - Optional arguments to pass to the command.
@@ -59,7 +59,9 @@ Function that runs the `on::exit` commands.  This is set as the EXIT trap in Bas
 
 Examples
 
-    # Set up the trap
+    # Set up the trap. This happens automatically when `on::exit` executes.
+    # The example shown here is only for how it is to be used within the
+    # library. Users of the library don't need to run this.
     trap on::exitTrap EXIT
 
 Returns nothing.

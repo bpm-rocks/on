@@ -68,7 +68,9 @@ on::exit() {
 #
 # Examples
 #
-#   # Set up the trap
+#   # Set up the trap. This happens automatically when `on::exit` executes.
+#   # The example shown here is only for how it is to be used within the
+#   # library. Users of the library don't need to run this.
 #   trap on::exitTrap EXIT
 #
 # Returns nothing.
