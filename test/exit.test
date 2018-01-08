@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+
+unittest::setup() {
+    touch file1 file2
+    . ../libon
+}
+
+unittest::teardown() {
+    rm -f file1 file2
+}
+
+unittest::case::exit-runs() {
+    (
+        on::exit rm file1
+    )
+    [[ -f file2 ]] || return 1
+    [[ ! -f file1 ]] || return 1
+}
+
+unittest::case::exit-runs-at-right-time() {
+    (
+        on::exit rm file1
+        (
+            on::exit rm file2
+        )
+        [[ -f file1 ]] || return 1
+        [[ ! -f file2 ]] || return 1
+    )
+    [[ ! -f file1 ]] || return 1
+}
+
+unittest::case::preserve-existing-trap() {
+    (
+        trap "rm file1" EXIT
+        on::exit rm file2
+    )
+    [[ ! -f file1 ]] || return 1
+    [[ ! -f file2 ]] || return 1
+}
